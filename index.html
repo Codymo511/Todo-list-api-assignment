@@ -20,11 +20,27 @@
       <div class="col-md-12">
         <h1>To Do List</h1>
       </div>
+     
       <div id='todo-list'>
       </div>
       <form id="create-task">
         <input id="new-task-content" type="text" placeholder="new task" required/>
         <button>Create</button>
+      </form>
+      <form id="taskToggle">
+        <div></div>
+        <label class="selected">
+          <input type="radio" name="searchtype"  value="one">
+          <div>All</div>
+        </label>
+        <label>
+          <input type="radio" name="searchtype"  value="two">
+          <div>Completed</div>
+        </label>
+        <label>
+          <input type="radio" name="searchtype"  value="three">
+          <div>Active</div>
+        </label>
       </form>
     </div>
    </div>

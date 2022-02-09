@@ -9,6 +9,7 @@ $(document).ready(function(){
         response.tasks.forEach(function (task) {
           $('#todo-list').append('<div class="row"><p class="col-xs-8">' + task.content + '</p><button class="delete" data-id="' + task.id + '">Delete</button><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '>');
         });
+        // take response.task that are completed and filter from here, then create html  buttons to allow user to toggle which tasks to see
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
