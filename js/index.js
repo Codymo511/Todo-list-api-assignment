@@ -58,7 +58,10 @@ $(document).ready(function(){
     });
   }
 
- 
+$(document).on('click','.delete',function(){
+  deleteTask($(this).data('id'));
+})
+
 
   var markTaskComplete = function (id) {
     $.ajax({
@@ -89,10 +92,6 @@ $(document).ready(function(){
   }
 
  
-
-
-
-
   //grab data here and display it 
   var displayCompletedTasks = function (id) {
     $.ajax({
@@ -101,8 +100,26 @@ $(document).ready(function(){
       dataType: 'json',
       success: function (response, textStatus) {
         response.tasks.forEach(function (task) {
-         if(task.completed ==! true){
-          $(this).closest("#row").remove(); // this is where I left off, it will remove all the tasks if i use response.tasks.. I need to select this is one tasks and remove it. If i can do this, showing incompeleted will be easy.
+         if(task.completed == true){
+          $('#todo-list').append('<div class="row"><p class="col-xs-8">' + task.content + '</p><button class="delete" data-id="' + task.id + '">Delete</button><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '>');
+          }
+        });
+      },
+      error: function (request, textStatus, errorMessage) {
+        console.log(errorMessage);
+      }
+    });
+  }
+
+  var displayNotCompletedTasks = function (id) {
+    $.ajax({
+      type: 'GET',
+      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=236',
+      dataType: 'json',
+      success: function (response, textStatus) {
+        response.tasks.forEach(function (task) {
+         if(task.completed == !true){
+          $('#todo-list').append('<div class="row"><p class="col-xs-8">' + task.content + '</p><button class="delete" data-id="' + task.id + '">Delete</button><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '>');
           }
         });
       },
@@ -117,17 +134,16 @@ $(document).ready(function(){
     getAndDisplayAllTasks();
   });
   
+  $('#showCompleted').on('click',function () {
+    $("#todo-list").empty()
+    displayCompletedTasks();
+  });
  
-//thie might work
-  $('#showCompleted').on('click',function() {
-    $('input').each(function () {
-      if(input.complete == true){
-        $(this).closest("#row").remove();
-     // }{}
-  }
+  $('#showIncompleted').on('click',function () {
+    $("#todo-list").empty()
+    displayNotCompletedTasks();
+  });
 
-
-  
   $(document).on('change', '.mark-complete', function () {
     if (this.checked) {
       markTaskComplete($(this).data('id'));
