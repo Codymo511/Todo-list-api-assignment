@@ -9,11 +9,13 @@ $(document).ready(function(){
         response.tasks.forEach(function (task) {
           $('#todo-list').append('<div class="row"><p class="col-xs-8">' + task.content + '</p><button class="delete" data-id="' + task.id + '">Delete</button><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '>');
         });
-        // take response.task that are completed and filter from here, then create html  buttons to allow user to toggle which tasks to see
+        console.log(response.tasks)
+       
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
       }
+      
     });
   }
   
@@ -56,9 +58,7 @@ $(document).ready(function(){
     });
   }
 
-  $(document).on('click', '.delete', function () {
-    deleteTask($(this).data('id'));
-  });
+ 
 
   var markTaskComplete = function (id) {
     $.ajax({
@@ -88,18 +88,23 @@ $(document).ready(function(){
     });
   }
 
+ 
+
+
+
+
   //grab data here and display it 
-  var displayCompletedTasks = function () {
+  var displayCompletedTasks = function (id) {
     $.ajax({
       type: 'GET',
       url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=236',
       dataType: 'json',
       success: function (response, textStatus) {
-        $('#todo-list').empty();
         response.tasks.forEach(function (task) {
-          $('#todo-list').append('<div class="row"><p class="col-xs-8">' + task.content + '</p><button class="delete" data-id="' + task.id + '">Delete</button><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '>');
+         if(task.completed ==! true){
+          $(this).closest("#row").remove(); // this is where I left off, it will remove all the tasks if i use response.tasks.. I need to select this is one tasks and remove it. If i can do this, showing incompeleted will be easy.
+          }
         });
-        // take response.task that are completed and filter from here, then create html  buttons to allow user to toggle which tasks to see
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -112,11 +117,17 @@ $(document).ready(function(){
     getAndDisplayAllTasks();
   });
   
-  $('#showCompleted').on('click',function () {
-    displayCompletedTasks();
-  });
+ 
+//thie might work
+  $('#showCompleted').on('click',function() {
+    $('input').each(function () {
+      if(input.complete == true){
+        $(this).closest("#row").remove();
+     // }{}
+  }
 
 
+  
   $(document).on('change', '.mark-complete', function () {
     if (this.checked) {
       markTaskComplete($(this).data('id'));
